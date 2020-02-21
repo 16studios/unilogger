@@ -17,20 +17,29 @@ public class Menu_bar {
     JMenuBar menu_bar = new JMenuBar();
     // Add the menubar to the frame
     frame.setJMenuBar(menu_bar);
-    // Define and add drop down menu to the menubar
+    // Define and add drop down menus to the menubar
     JMenu file_menu = new JMenu("File");
     JMenu options_menu = new JMenu("Options");
+    JMenu tools_menu = new JMenu("Tools");
 
     menu_bar.add(file_menu);
     menu_bar.add(options_menu);
+    menu_bar.add(tools_menu);
 
-    // Create and add simple menu item to one of the drop down menu
+    //File Menu Items
     JMenuItem new_file = new JMenuItem("Open Log");
     JMenuItem action_exit = new JMenuItem("Exit");
 
     file_menu.add(new_file);
     file_menu.addSeparator();
     file_menu.add(action_exit);
+    
+    //Options Menu Items
+    
+    //Tools Menu Items
+    JMenuItem maf_scale = new JMenuItem("MAF Scaling");
+    
+    tools_menu.add(maf_scale);
 
     // Add a listener to the New menu item. actionPerformed() method will
     // invoked, if user triggred this menu item

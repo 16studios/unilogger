@@ -1,7 +1,11 @@
+import grafica.*;
+
+public GPlot graph;
+
 Table table;
 DataHandler DataHandler;
 Menu_bar mp;
-Checkbox[] boxes = new Checkbox[1];
+Checkbox[] boxes = new Checkbox[1];    
 
 String fileName = " ";
 
@@ -11,6 +15,8 @@ void setup() {
   background(0);
   size(1280, 720);
   mp = new Menu_bar(this, "UniLogger", 100, 100);
+  
+  graphSetup();
     
   /*for (TableRow row : table.rows()) {
 
@@ -33,9 +39,70 @@ void draw() {
   if(boxes[0] != null) {
     for(int i=0; i< boxes.length; i++){
       boxes[i].render();
-      //text(DataHandler.parameters[i], 20, 10 + 30 * i); 
     }
   }
+  drawGraph();
+}
+
+void drawGraph() {
+    graph.beginDraw();
+    graph.drawBackground();
+    graph.drawBox();
+    graph.drawXAxis();
+    graph.drawYAxis();
+    graph.drawTopAxis();
+    graph.drawRightAxis();
+    graph.drawTitle();
+    graph.drawPoints();
+    graph.drawLines();
+    //graph.drawPoint(new GPoint(65, 1.5), mug);
+    //graph.drawPolygon(polygonPoints, color(255, 200));
+    graph.drawLabels();
+    graph.endDraw();
+    
+}
+
+void setGraph(int c) {
+    float[] data = float(table.getStringColumn(c));
+    float[] time = float(table.getStringColumn(0));
+    println(data);
+    GPointsArray points = new GPointsArray(data.length-1);
+  
+    for (int i = 0; i < data.length; i++) {
+    points.add(time[i], data[i], str(data[i]));
+  }
+  
+  graph.addLayer("layer " + c, points);
+  graph.getLayer("layer " + c).setPointColor(boxes[0].colorArray[c]);
+  graph.getLayer("layer " + c).setPointSize(1);
+  graph.getLayer("layer " + c).setLineColor(boxes[0].colorArray[c]);
+}
+
+void graphSetup() {
+  //real code
+  
+  graph = new GPlot(this);
+  graph.setPos(280, 0);
+  graph.setDim(900, 600);
+  graph.setXLim(0, 400);
+  graph.setYLim((-20), 300);
+  graph.getTitle().setText("Log Viewer");
+  graph.getXAxis().getAxisLabel().setText("Time");
+  //graph.getYAxis().getAxisLabel().setText("noise (0.1 time)");
+  graph.setLogScale("xy");
+  graph.setBgColor(50);
+  graph.setBoxBgColor(50);
+  graph.setBoxLineColor(255);
+  graph.setLabelBgColor(255);
+  graph.setAllFontProperties("sansserif", 255, 12);
+  
+  graph.activatePanning();
+  graph.activateZooming(1.2, CENTER, CENTER);
+  graph.activatePointLabels();
+  //testing stuff
+  //graph.setPoints(points1a);
+  //graph.setPointColor(color(20, 200, 255));
+ // graph.setPointSize(5);
 }
 
 void selectFile(File selection) {
@@ -56,7 +123,7 @@ void postSetup() {
    println(table.getColumnCount() + " total Columns in table");
 
    for(int i=0; i< boxes.length; i++){
-    boxes[i] = new Checkbox(10, 10 + 25 * i, DataHandler.parameters[i]);
+    boxes[i] = new Checkbox(10, 40 + 25 * i, DataHandler.parameters[i], i);
    }
     
 }
